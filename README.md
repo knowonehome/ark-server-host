@@ -5,7 +5,7 @@ Docker build for managing an ARK: Survival Evolved server.
 This image uses [Ark Server Tools](https://github.com/FezVrasta/ark-server-tools) to manage an ark server and is forked from [turzam/ark](https://hub.docker.com/r/turzam/ark/).
 
 *If you use an old volume, get the new arkmanager.cfg in the template directory.*  
-__Don't forget to use `docker pull boerngenschmidt/ark-docker` to get the latest version of the image__
+__Don't forget to use `docker pull peetk2k17/ark` to get the latest version of the image__
 
 ## Features
  - Easy install (no steamcmd / lib32... to install)
@@ -13,41 +13,41 @@ __Don't forget to use `docker pull boerngenschmidt/ark-docker` to get the latest
  - Easy crontab configuration
  - Easy access to ark config file
  - Mods handling (via Ark Server Tools)
- - `Docker stop` is a clean stop 
+ - `Docker stop` is a clean stop
  - Auto upgrading of arkmanager
 
 ## Usage
 Fast & Easy server setup :   
-`docker run -d -p 7778:7778 -p 7778:7778/udp -p 27015:27015 -p 27015:27015/udp -e SESSIONNAME=myserver -e ADMINPASSWORD="mypasswordadmin" --name ark boerngenschmidt/ark-docker`
+`docker run -d -p 7778:7778 -p 7778:7778/udp -p 27015:27015 -p 27015:27015/udp -e SESSIONNAME=myserver -e ADMINPASSWORD="mypasswordadmin" --name ark peetk2k17/ark`
 
 You can map the ark volume to access config files :  
-`docker run -d -p 7778:7778 -p 7778:7778/udp -p 27015:27015 -p 27015:27015/udp -e SESSIONNAME=myserver -v /my/path/to/ark:/ark --name ark boerngenschmidt/ark-docker`  
+`docker run -d -p 7778:7778 -p 7778:7778/udp -p 27015:27015 -p 27015:27015/udp -e SESSIONNAME=myserver -v /my/path/to/ark:/ark --name ark peetk2k17/ark`  
 Then you can edit */my/path/to/ark/arkmanager.cfg* (the values override GameUserSetting.ini) and */my/path/to/ark/[GameUserSetting.ini/Game.ini]*
 
 You can manager your server with rcon if you map the rcon port (you can rebind the rcon port with docker):  
-`docker run -d -p 7778:7778 -p 7778:7778/udp -p 27015:27015 -p 27015:27015/udp -p 32330:32330  -e SESSIONNAME=myserver --name ark boerngenschmidt/ark-docker`  
+`docker run -d -p 7778:7778 -p 7778:7778/udp -p 27015:27015 -p 27015:27015/udp -p 32330:32330  -e SESSIONNAME=myserver --name ark peetk2k17/ark`  
 
 You can change server and steam port to allow multiple servers on same host:  
 *(You can't just rebind the port with docker. It won't work, you need to change STEAMPORT & SERVERPORT variable)*
-`docker run -d -p 7779:7779 -p 7779:7779/udp -p 27016:27016 -p 27016:27016/udp -p 32331:32330  -e SESSIONNAME=myserver2 -e SERVERPORT=27016 -e STEAMPORT=7779 --name ark2 boerngenschmidt/ark-docker`  
+`docker run -d -p 7779:7779 -p 7779:7779/udp -p 27016:27016 -p 27016:27016/udp -p 32331:32330  -e SESSIONNAME=myserver2 -e SERVERPORT=27016 -e STEAMPORT=7779 --name ark2 peetk2k17/ark`  
 
 You can check your server with :  
-`docker exec ark arkmanager status` 
+`docker exec ark arkmanager status`
 
 You can manually update your mods:  
-`docker exec ark arkmanager update --update-mods` 
+`docker exec ark arkmanager update --update-mods`
 
 You can manually update your server:  
-`docker exec ark arkmanager update --force` 
+`docker exec ark arkmanager update --force`
 
 You can force save your server :  
-`docker exec ark arkmanager saveworld` 
+`docker exec ark arkmanager saveworld`
 
 You can backup your server :  
-`docker exec ark arkmanager backup` 
+`docker exec ark arkmanager backup`
 
 You can upgrade Ark Server Tools :  
-`docker exec ark arkmanager upgrade-tools` 
+`docker exec ark arkmanager upgrade-tools`
 
 You can use rcon command via docker :  
 `docker exec ark arkmanager rconcmd ListPlayers`  
@@ -85,14 +85,14 @@ To add mods, you only need to change the variable ark_GameModIds in *arkmanager.
   -e ADMINPASSWORD="mypasswordadmin" \
   -e TZ=Europe/Berlin \
   -v /my/path/to/ark:/ark \
-  boerngenschmidt/ark-docker
+  peetk2k17/ark
   ```
 - Wait for ark to be downloaded installed and launched, then Ctrl+C to stop the server.
 - Edit */my/path/to/ark/GameUserSetting.ini and Game.ini*
 - Edit */my/path/to/ark/arkserver.cfg* to add mods and configure warning time.
 - Add auto update every day and autobackup by editing */my/path/to/ark/crontab*. [See](#crontab---job-automation)
 - Start the container `docker start ark`
-- Check your server with : `docker exec ark arkmanager status` 
+- Check your server with : `docker exec ark arkmanager status`
 
 ### Docker-Compose
 - Modify [docker-compose.yml](docker-compose.yml)
@@ -137,14 +137,14 @@ To add mods, you only need to change the variable ark_GameModIds in *arkmanager.
 Currently none
 
 ## Changelog
-+ 1.0 : 
++ 1.0 :
   - Initial image : works with Ark Server tools 1.3
   - Add auto-update & auto-backup  
 + 1.1 :  
   - Works with Ark Server Tools 1.4 [See changelog here](https://github.com/FezVrasta/ark-server-tools/releases/tag/v1.4)
   - Handle mods && auto update mods
 + 1.2 :
-  - Remove variable AUTOBACKUP & AUTOUPDATE 
+  - Remove variable AUTOBACKUP & AUTOUPDATE
   - Remove variable WARNMINUTE (can now be find in arkmanager.cfg)
   - Add crontab support
   - You can now config crontab with the file /your/ark/path/crontab
@@ -168,4 +168,3 @@ Currently none
   - added auto upgrading of arkmanager
 + 1.5 :
   - fixed arkmanager upgrade
-
