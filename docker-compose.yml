@@ -1,11 +1,11 @@
 ark:
   container_name: ark
-  image: boerngenschmidt/ark-docker
+  image: peet2k17/ark
   environment:
     - SESSIONNAME=Ark Docker
     - SERVERMAP=TheIsland
     - MAX_PLAYERS=70
-    - SERVERPASSWORD="" 
+    - SERVERPASSWORD=""
     - ADMINPASSWORD=adminpassword
     - SERVERPORT=27015
     - STEAMPORT=7778

@@ -13,7 +13,7 @@ function stop {
 		echo "[Backup on stop]"
 		arkmanager backup
 	fi
-	if [ ${WARNONSTOP} -eq 1 ];then 
+	if [ ${WARNONSTOP} -eq 1 ];then
 	    arkmanager stop --warn
 	else
 	    arkmanager stop

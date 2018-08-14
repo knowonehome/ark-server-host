@@ -1,14 +1,14 @@
 #!/bin/sh
 
 # Change the ARK_UID if needed
-if [ ! "$(id -u steam)" -eq "$ARK_UID" ]; then 
+if [ ! "$(id -u steam)" -eq "$ARK_UID" ]; then
 	echo "Changing steam uid to $ARK_UID."
-	usermod -o -u "$ARK_UID" steam ; 
+	usermod -o -u "$ARK_UID" steam ;
 fi
 # Change gid if needed
-if [ ! "$(id -g steam)" -eq "$ARK_GID" ]; then 
+if [ ! "$(id -g steam)" -eq "$ARK_GID" ]; then
 	echo "Changing steam gid to $ARK_GID."
-	groupmod -o -g "$ARK_GID" steam ; 
+	groupmod -o -g "$ARK_GID" steam ;
 fi
 
 # Set Timezone
