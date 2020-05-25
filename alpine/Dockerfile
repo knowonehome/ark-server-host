@@ -1,5 +1,5 @@
 FROM i386/alpine:3.6
-MAINTAINER boerngenschmidt
+MAINTAINER NowyQuei
 
 # Var for first config
 ENV SESSIONNAME="Ark Docker" \
