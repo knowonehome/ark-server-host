@@ -1,6 +1,6 @@
 ark:
-  container_name: ark
-  image: peet2k17/ark
+  container_name: ark-server-host
+  image: knowonehome/ark-server-host
   environment:
     - SESSIONNAME=Ark Docker
     - SERVERMAP=TheIsland
