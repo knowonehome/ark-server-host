@@ -1,5 +1,5 @@
 FROM centos:7
-MAINTAINER NowyQuei
+MAINTAINER knowonehome
 
 # Var for first config
 ENV SESSIONNAME="Ark Docker" \
