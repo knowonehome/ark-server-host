@@ -1,5 +1,5 @@
 ark:
-  container_name: ark-server-host
+  container_name: ark
   image: knowonehome/ark-server-host
   environment:
     - SESSIONNAME=Ark Docker
