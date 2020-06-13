@@ -1,5 +1,4 @@
-SHELL=/bin/bash
-# Example of job definition:
+# Example of job definition: 
 # .---------------- minute (0 - 59) 
 # |  .------------- hour (0 - 23) 
 # |  |  .---------- day of month (1 - 31) 
@@ -8,12 +7,10 @@ SHELL=/bin/bash
 # |  |  |  |  | 
 # *  *  *  *  *  user command to be executed 
 # Example : update every hour
-# 0 * * * * arkmanager update >> /ark/log/crontab.log 2>&1
+# 0 * * * * arkmanager update
 # Example : backup every 15min
-# */15 * * * * arkmanager backup >> /ark/log/crontab.log 2>&1
+# */15 * * * * arkmanager backup
 # Example : backup every day at midnight
-# 0 0 * * * arkmanager backup >> /ark/log/crontab.log 2>&1
-# Example : Clean up backups older than 7 days and remove empty folders at 2:10am
-# 10 2 * * * find /ark/backup -type f -mtime +7 -delete; find /ark/backup -type d -empty -delete
+# 0 0 * * * arkmanager backup
 # WARNING : the container timezone is maybe not your current timezone
 #           You can sync them with option -v /etc/localtime:/etc/localtime:ro or -e "TZ=UTC"

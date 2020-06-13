@@ -1,21 +1,16 @@
 ark:
   container_name: ark
-  image: knowonehome/ark-server-host
+  image: turzam/ark
   environment:
     - SESSIONNAME=Ark Docker
     - SERVERMAP=TheIsland
-    - MAX_PLAYERS=70
-    - SERVERPASSWORD=""
+    - SERVERPASSWORD="" 
     - ADMINPASSWORD=adminpassword
-    - SERVERPORT=27015
-    - STEAMPORT=7778
     - BACKUPONSTART=1
-    - BACKUPONSTOP=1
-    - WARNONSTOP=1
     - UPDATEONSTART=1
-    - TZ=UTC
-    - ARK_GID=1000
-    - ARK_UID=1000
+    - TZ=Europe/Paris
+    - GID=1000
+    - UID=1000
   volumes:
     - /my/path/to/ark:/ark
   ports:

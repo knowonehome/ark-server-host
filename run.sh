@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 echo "###########################################################################"
 echo "# Ark Server - " `date`
-echo "# UID $ARK_UID - GID $ARK_GID"
+echo "# UID $UID - GID $GID"
 echo "###########################################################################"
 [ -p /tmp/FIFO ] && rm /tmp/FIFO
 mkfifo /tmp/FIFO
@@ -13,13 +13,15 @@ function stop {
 		echo "[Backup on stop]"
 		arkmanager backup
 	fi
-	if [ ${WARNONSTOP} -eq 1 ];then
+	if [ ${WARNONSTOP} -eq 1 ];then 
 	    arkmanager stop --warn
 	else
 	    arkmanager stop
 	fi
 	exit
 }
+
+
 
 # Change working directory to /ark to allow relative path
 cd /ark
@@ -38,7 +40,9 @@ cp /home/steam/crontab /ark/template/crontab
 [ ! -L /ark/GameUserSettings.ini ] && ln -s server/ShooterGame/Saved/Config/LinuxServer/GameUserSettings.ini GameUserSettings.ini
 [ ! -f /ark/crontab ] && cp /ark/template/crontab /ark/crontab
 
-if [ ! -d /ark/server  ] || [ ! -f /ark/server/version.txt ];then
+
+
+if [ ! -d /ark/server  ] || [ ! -f /ark/server/arkversion ];then 
 	echo "No game files found. Installing..."
 	mkdir -p /ark/server/ShooterGame/Saved/SavedArks
 	mkdir -p /ark/server/ShooterGame/Content/Mods
@@ -47,19 +51,29 @@ if [ ! -d /ark/server  ] || [ ! -f /ark/server/version.txt ];then
 	arkmanager install
 	# Create mod dir
 else
-	if [ ${BACKUPONSTART} -eq 1 ] && [ "$(ls -A server/ShooterGame/Saved/SavedArks/)" ]; then
+
+	if [ ${BACKUPONSTART} -eq 1 ] && [ "$(ls -A server/ShooterGame/Saved/SavedArks/)" ]; then 
 		echo "[Backup]"
 		arkmanager backup
 	fi
 fi
 
-# Installing crontab for user steam
-echo "Loading crontab..."
-cat /ark/crontab | crontab -
+
+# If there is uncommented line in the file
+CRONNUMBER=`grep -v "^#" /ark/crontab | wc -l`
+if [ $CRONNUMBER -gt 0 ]; then
+	echo "Loading crontab..."
+	# We load the crontab file if it exist.
+	crontab /ark/crontab
+	# Cron is attached to this process
+	sudo cron -f &
+else
+	echo "No crontab set."
+fi
 
 # Launching ark server
 if [ $UPDATEONSTART -eq 0 ]; then
-	arkmanager start --noautoupdate
+	arkmanager start -noautoupdate
 else
 	arkmanager start
 fi
