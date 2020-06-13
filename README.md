@@ -18,7 +18,7 @@ __Don't forget to use `docker pull knowonehome/ark-server-host` to get the lates
 
 ## Usage
 Fast & Easy server setup :   
-`docker run -d -p 7778:7778 -p 7778:7778/udp -p 27015:27015 -p 27015:27015/udp -e SESSIONNAME=myserver -e ADMINPASSWORD="mypasswordadmin" --name ark peetk2k17/ark`
+`docker run -d -p 7778:7778 -p 7778:7778/udp -p 27015:27015 -p 27015:27015/udp -e SESSIONNAME=myserver -e ADMINPASSWORD="mypasswordadmin" --name ark ark-server-host`
 
 You can map the ark volume to access config files :  
 `docker run -d -p 7778:7778 -p 7778:7778/udp -p 27015:27015 -p 27015:27015/udp -e SESSIONNAME=myserver -v /my/path/to/ark:/ark --name ark knowonehome/ark-server-host`  
