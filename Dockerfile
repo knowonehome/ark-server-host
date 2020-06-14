@@ -1,4 +1,4 @@
-FROM centos:7
+FROM ubuntu:18.04
 MAINTAINER knowonehome
 
 # Var for first config
@@ -18,10 +18,17 @@ ENV SESSIONNAME="Ark Docker" \
     TZ=UTC
 
 ## Install dependencies
-RUN yum -y install glibc.i686 libstdc++.i686 git lsof bzip2 cronie perl-Compress-Zlib \
- && yum clean all \
- && adduser -u $ARK_UID -s /bin/bash -U steam
-
+RUN apt-get update \
+ && apt-get install -y sudo curl lib32gcc1 lsof git ssh bzip2 \
+ && sed -i.bkp -e \
+	's/%sudo\s\+ALL=(ALL\(:ALL\)\?)\s\+ALL/%sudo ALL=NOPASSWD:ALL/g' /etc/sudoers \
+	/etc/sudoers \
+ && adduser \ 
+	--disabled-login \ 
+	--shell /bin/bash \ 
+	--gecos "" \ 
+	steam \
+ && usermod -a -G sudo steam
 # Copy & rights to folders
 COPY run.sh /home/steam/run.sh
 COPY user.sh /home/steam/user.sh
