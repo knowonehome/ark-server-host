@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:14.04
 
 MAINTAINER knowonehome
 
@@ -18,7 +18,7 @@ ENV UPDATEONSTART 1
 # if the server is backup when start with docker start
 ENV BACKUPONSTART 1
 #  Tag on github for ark server tools
-ENV GIT_TAG v1.6.52a
+ENV GIT_TAG v1.6
 # Server PORT (you can't remap with docker, it doesn't work)
 ENV SERVERPORT 27015
 # Steam port (you can't remap with docker, it doesn't work)
@@ -100,7 +100,7 @@ EXPOSE ${STEAMPORT}/udp ${SERVERPORT}/udp
 
 VOLUME  /ark 
 
-# Change the working directory to /arkd
+# Change the working directory to /ark
 WORKDIR /ark
 
 # Update game launch the game.
