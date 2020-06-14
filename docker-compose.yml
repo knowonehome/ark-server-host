@@ -1,6 +1,6 @@
 ark:
   container_name: ark
-  image: turzam/ark
+  image: knowonehome/ark-server-host
   environment:
     - SESSIONNAME=Ark Docker
     - SERVERMAP=TheIsland
