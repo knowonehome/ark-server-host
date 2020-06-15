@@ -4,11 +4,15 @@ ark:
   environment:
     - SESSIONNAME=Ark Docker
     - SERVERMAP=TheIsland
-    - SERVERPASSWORD="" 
+    - SERVERPASSWORD=""
     - ADMINPASSWORD=adminpassword
+    - SERVERPORT=27015
+    - STEAMPORT=7778
     - BACKUPONSTART=1
+    - BACKUPONSTOP=1
+    - WARNONSTOP=1
     - UPDATEONSTART=1
-    - TZ=Europe/Paris
+    - TZ=America/Chicago
     - GID=1000
     - UID=1000
   volumes:

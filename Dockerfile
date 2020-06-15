@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM centos:7
 MAINTAINER knowonehome
 
 # Var for first config
@@ -6,7 +6,7 @@ ENV SESSIONNAME="Ark Docker" \
     SERVERMAP="TheIsland" \
     SERVERPASSWORD="" \
     ADMINPASSWORD="adminpassword" \
-    MAX_PLAYERS=70 \
+    MAX_PLAYERS=10 \
     UPDATEONSTART=1 \
     BACKUPONSTART=1 \
     SERVERPORT=27015 \
@@ -18,69 +18,43 @@ ENV SESSIONNAME="Ark Docker" \
     TZ=UTC
 
 ## Install dependencies
-RUN apt-get update \
- && apt-get install -y sudo curl lib32gcc1 lsof git ssh bzip2 \
- && sed -i.bkp -e \
-	's/%sudo\s\+ALL=(ALL\(:ALL\)\?)\s\+ALL/%sudo ALL=NOPASSWD:ALL/g' /etc/sudoers \
-	/etc/sudoers \
- && adduser \ 
-	--disabled-login \ 
-	--shell /bin/bash \ 
-	--gecos "" \ 
-	steam \
- && usermod -a -G sudo steam
-# Copy & rights to folders
-COPY run.sh /home/steam/run.sh
-COPY user.sh /home/steam/user.sh
-COPY crontab /home/steam/crontab
-COPY arkmanager-user.cfg /home/steam/arkmanager.cfg
+RUN yum -y install nano glibc.i686 libstdc++.i686 git lsof bzip2 cronie perl-Compress-Zlib \
+ && yum clean all \
+ && adduser -u $ARK_UID -s /bin/bash -U steam
 
-RUN touch /root/.bash_profile
-RUN chmod 777 /home/steam/run.sh
-RUN chmod 777 /home/steam/user.sh
-RUN mkdir  /ark
+ # Copy & rights to folders
+ COPY run.sh /home/steam/run.sh
+ COPY user.sh /home/steam/user.sh
+ COPY crontab /home/steam/crontab
+ COPY arkmanager-user.cfg /home/steam/arkmanager.cfg
 
+ RUN chmod 777 /home/steam/run.sh \
+  && chmod 777 /home/steam/user.sh \
+  ## Always get the latest version of ark-server-tools
+  && git clone -b $(git ls-remote --tags https://github.com/FezVrasta/ark-server-tools.git | awk '{print $2}' | grep -v '{}' | awk -F"/" '{print $3}' | tail -n 1) --single-branch --depth 1 https://github.com/FezVrasta/ark-server-tools.git /home/steam/ark-server-tools \
+  && cd /home/steam/ark-server-tools/tools \
+  && bash install.sh steam --bindir=/usr/bin \
+  && (crontab -l 2>/dev/null; echo "* 3 * * Mon yes | arkmanager upgrade-tools >> /ark/log/arkmanager-upgrade.log 2>&1") | crontab - \
+  && mkdir /ark \
+  && chown steam /ark && chmod 755 /ark \
+  && mkdir /home/steam/steamcmd \
+  && cd /home/steam/steamcmd \
+  && curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -
 
-# We use the git method, because api github has a limit ;)
-RUN  git clone https://github.com/FezVrasta/ark-server-tools.git /home/steam/ark-server-tools
-WORKDIR /home/steam/ark-server-tools/
-RUN  git checkout $GIT_TAG 
-# Install 
-WORKDIR /home/steam/ark-server-tools/tools
-RUN chmod +x install.sh 
-RUN ./install.sh steam 
+ # Define default config file in /etc/arkmanager
+ COPY arkmanager-system.cfg /etc/arkmanager/arkmanager.cfg
 
-# Allow crontab to call arkmanager
-RUN ln -s /usr/local/bin/arkmanager /usr/bin/arkmanager
+ # Define default config file in /etc/arkmanager
+ COPY instance.cfg /etc/arkmanager/instances/main.cfg
 
-# Define default config file in /etc/arkmanager
-COPY arkmanager-system.cfg /etc/arkmanager/arkmanager.cfg
+ EXPOSE ${STEAMPORT} 32330 ${SERVERPORT}
+ # Add UDP
+ EXPOSE ${STEAMPORT}/udp ${SERVERPORT}/udp
 
-# Define default config file in /etc/arkmanager
-COPY instance.cfg /etc/arkmanager/instances/main.cfg
+ VOLUME  /ark
 
-RUN chown steam -R /ark && chmod 755 -R /ark
+ # Change the working directory to /ark
+ WORKDIR /ark
 
-#USER steam 
-
-# download steamcmd
-RUN mkdir /home/steam/steamcmd &&\ 
-	cd /home/steam/steamcmd &&\ 
-	curl http://media.steampowered.com/installer/steamcmd_linux.tar.gz | tar -vxz 
-
-
-# First run is on anonymous to download the app
-# We can't download from docker hub anymore -_-
-#RUN /home/steam/steamcmd/steamcmd.sh +login anonymous +quit
-
-EXPOSE ${STEAMPORT} 32330 ${SERVERPORT}
-# Add UDP
-EXPOSE ${STEAMPORT}/udp ${SERVERPORT}/udp
-
-VOLUME  /ark 
-
-# Change the working directory to /ark
-WORKDIR /ark
-
-# Update game launch the game.
-ENTRYPOINT ["/home/steam/user.sh"]
+ # Update game launch the game.
+ ENTRYPOINT ["/home/steam/user.sh"]
