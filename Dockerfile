@@ -9,9 +9,8 @@ ENV SESSIONNAME="Ark Docker" \
     MAX_PLAYERS=10 \
     UPDATEONSTART=1 \
     BACKUPONSTART=1 \
-    SERVERPORT=27015 \
-    QUERYPORT=27016 \
-    STEAMPORT=7777 \
+    SERVERPORT=7777 \
+    QUERYPORT=27015 \
     BACKUPONSTOP=1 \
     WARNONSTOP=1 \
     ARK_UID=1000 \
@@ -50,7 +49,7 @@ RUN yum -y install nano glibc.i686 libstdc++.i686 git lsof bzip2 cronie perl-Com
 
  EXPOSE ${STEAMPORT} 32330 ${SERVERPORT}
  # Add UDP
- EXPOSE ${STEAMPORT}/udp ${SERVERPORT}/udp ${QUERYPORT}/udp 
+ EXPOSE ${STEAMPORT}/udp ${SERVERPORT}/udp ${QUERYPORT}/udp
 
  VOLUME  /ark
 
